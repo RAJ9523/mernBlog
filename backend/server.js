@@ -19,13 +19,13 @@ const __dirname = path.dirname(__filename);
 // Connect to the database
 const dbConnection = () => {
   mongoose.connect(process.env.MONGO_URI, {
-    dbName: 'BLOGAPP'
+    dbName: 'BLOGAPP',
   })
     .then(() => {
       console.log('Database Connected');
     })
     .catch(err => {
-      console.log(`SOME ERROR OCCURRED WHILE CONNECTING TO DATABASE: ${err}`);
+      console.error(`Error connecting to the database: ${err}`);
     });
 };
 
@@ -39,22 +39,22 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS configuration (uncomment and configure if needed)
-// app.use(cors({
-//   origin: process.env.FRONTEND_URL,
-//   methods: ["PUT", "GET", "POST", "DELETE"],
-//   credentials: true,
-// }));
+app.use(cors({
+  origin: process.env.FRONTEND_URL, // Ensure this is correctly set
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'client/dist')));
 
-// Routes
+// API Routes
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/comment', commentRoutes);
 
-// Handle any other requests (e.g., frontend SPA routing)
+// Serve the frontend application
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 });
@@ -71,6 +71,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(3000, () => {
-  console.log('Server is running on port 3000!');
+const PORT = process.env.PORT || 3000; // Use environment variable or default to 3000
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}!`);
 });
