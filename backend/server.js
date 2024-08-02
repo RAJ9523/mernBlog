@@ -14,7 +14,9 @@ dotenv.config();
 
 // Resolve __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
+
 const __dirname = path.dirname(__filename);
+
 
 // Connect to the database
 const dbConnection = () => {
