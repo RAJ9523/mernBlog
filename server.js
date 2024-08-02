@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
-
+const app = express()
 dotenv.config();
 
 // Resolve __dirname for ES modules
@@ -33,7 +33,7 @@ const dbConnection = () => {
 
 dbConnection();
 
-const app = express();
+
 
 // Middleware
 app.use(express.json());
